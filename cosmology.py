@@ -30,7 +30,7 @@ def time_to_temp(t):
     g_eff = 10.75
     if t < 1:
         g_eff = 10.75
-    elif t < 15: # Keep g_eff = 10.75 unless if statements actually work
+    elif t < 15: # Keep g_eff = 10.75 if so desired
         g_eff = 5.5
     else:
         g_eff = 2
@@ -67,7 +67,11 @@ def calc_n_over_p(t, n1eV=5e13, s1MeV=1e-43):
     k = 8.61733e-5
     n_over_p = euler**(-1.29e6/(k*T))
     # At t ~ t_freeze = 0.27 sec, n_over_p ~ 0.458.
-    n_over_p = 0.458 * euler**(-180/890) # 180 for deuterium formation and 890 for neutron decay
+    if t < 180:
+        n_over_p = 0.458 * euler**(-t/890) 
+    else: # Set t(max)=180 for deuterium formation, 890 - neutron decay
+        n_over_p = 0.374137
+    
     return n_over_p
 
 def calc_D_over_n(t, eta=5e-10, dE=2.2):
@@ -82,14 +86,47 @@ def calc_D_over_n(t, eta=5e-10, dE=2.2):
     D_over_n = 6.5 * eta * (k*T/9.3957e8)**1.5 * euler**(dE*1e6/(k*T))
     return D_over_n
 
+    # Read documentation as well please.
+
 def n_proton(t):
-    n = np.ones_like(t) # Input t in years
+    n = np.ones_like(t) # Input t in seconds
     # Use the value at 1 second: 3e30 per centimeter cubed
-    a_1sec = (3.169e-8/(13.8e9))**0.5
-    a = (t/(13.8e9))**0.5
-    n = 3e30 * (a_1sec/a)**3 # n output given per centimeter cubed
+    # Multiply by the ratio at 1 second to get n of neutrinos ~ 0.4575
+    n_over_p = np.ones_like(t)
+    euler = 2.71828
+    T = np.ones_like(t) # try t = 0.27 seconds
+    kk = 1.38065e-23 # Metric units
+    h_bar = 1.05457e-34
+    T = ((45 * h_bar**3 * (3e8)**5)/(16 * 3.14159**3 * 10.75 * 6.674e-11))**0.25 / kk * t**(-0.5)
+    k = 8.61733e-5
+    n_over_p = euler**(-1.29e6/(k*T))
+    # At t ~ t_freeze = 0.27 sec, n_over_p ~ 0.458.
+    if t < 180: # Use neutron decay up to 180 seconds
+        n_over_p = 0.458 * euler**(-t/890) 
+    else: # Set t(max)=180 for deuterium formation, 890 - neutron decay
+        n_over_p = 0.374137
+    n = 1.372457e30 * t**(-1.5) / n_over_p # n output given per centimeter cubed
     return n
-#Use neutron decay between 1 and 180 seconds.
+
+p = 3e30 * t**(-1.5)
+n = p * 0.4575 * 2.71828**(-t/890)
+p = p * euler**(t/890)
+d = D_over_n * n
+total = 2.5e26 # cap, heavily messaged to reflect conservation of number density sum
+# Deuterium plateaus as neutrons become limiting factor. 
+# Some n transform to p, while others are incorporated into the deuterium.
+dd = d * (total/2)/(total/2 + d)
+pp = p - dd
+nn = n - dd
+# plot vs. time
+
+# The new cross section drops the collision rate accordingly, down a factor of 1000.
+# t_freeze subsequently drops too, but to just below 0.01 seconds.
+# Therefore, the ratio of n_over_p remains closer to 1 and Y_max becomes larger.
+
+# Nucleosynthesis becomes more difficult as the number of reactions of interest increase.
+# For Helium, 2 Deuterium nuclei can react to form either 3_He or 4_He, while tritium plays a role too.
+# In lecture, we counted at least 7 reactions at this stage with Helium appearing in 5 of them.
 
 t = np.logspace(.001, 300, num=1000)
 pylab.plot(t, calc_D_over_n(t))
