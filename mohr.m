@@ -42,7 +42,7 @@ sig_avg = (sigx+sigy)/2;    % Calculate average normal stress
 tmax = (((sigx-sigy)/2)^2 + txy^2)^0.5;       % Calculate maximum in-plane shear stress
 sig1 = sig_avg + tmax;       % Calculate maximum normal stress (principal stress 1)
 sig2 = sig_avg - tmax;       % Calculate minimum normal stress (principal stress 2)
-tp1 =  arctan(2*txy/(sigx-sigy)) / 2;       % Calculate rotation angle (in degrees) to principal 
+tp1 =  atan(2*txy/(sigx-sigy)) / 2;       % Calculate rotation angle (in degrees) to principal 
                 % stress 1 
   pi = 3.14159;
 tp2 =  tp1 + pi/2;       % Calculate rotation angle (in degrees) to principal 
