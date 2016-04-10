@@ -1,15 +1,19 @@
 pro radec2altaz, ra, dec, lst
 
 ; Inputs should be in decimal form. If not, then apply ten().
-lat = 18.34417 ; degrees North (37.8719 at UCB).
-long = -66.75278 ; degrees West (-122.2585 at UCB).
+lat = double(18.34417) ; degrees North (37.873199 at UCB).
+long = double(-66.75278) ; degrees West (-122.257063 at UCB).
 ; timezone = UTC - 4
 ; hour angle ha + ra = LST
 
-lst_rad = lst * 15.0 * !dtor
-alpha = ra * !dtor
-delta = dec * !dtor 
-phi = lat * !dtor ; Everything from degrees to radians.
+ra = double(ra)
+dec = double(dec)
+lst = double(lst)
+
+lst_rad = double(lst * 15.0 * !dtor)
+alpha = double(ra * !dtor)
+delta = double(dec * !dtor) 
+phi = double(lat * !dtor) ; Everything from degrees to radians.
 
 x_0 = cos(delta) * cos(alpha)
 x_1 = cos(delta) * sin(alpha)
@@ -22,9 +26,12 @@ transform2 = [[-sin(phi), 0.0, cos(phi)], [0.0, -1.0, 0.0], [cos(phi), 0.0, sin(
 transform = transform2 ## transform1 ## x
 
 alt = asin(transform(2)) * !radeg
+alt = double(alt)
 az = atan(transform(1), transform(0)) * !radeg
+az = double(az)
 
 if az LT 0.0 then az = az + 360.0
+if az GT 360.0 then az = az - 360.0
 
 print, [alt, az]
 
@@ -32,8 +39,8 @@ end
 
 pro hadec2altaz, ra, dec, lst
 
-lat = 18.34417 ; degrees North (37.8719 at UCB).                    
-long = -66.75278 ; degrees West (-122.2585 at UCB).  
+lat = 37.8719 ;18.34417 ; degrees North (37.8719 at UCB).                    
+long = -122.2585 ;-66.75278 ; degrees West (-122.2585 at UCB).  
 
 lst_rad = lst * 15.0 * !dtor
 alpha = ra * !dtor
