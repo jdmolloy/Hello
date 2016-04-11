@@ -3,8 +3,8 @@ pro radec2altaz, ra, dec, lst, lat, long
 ; Inputs should be in decimal form. If not, then apply ten().
 if n_elements(lat) EQ 0 then lat = double(18.34417) 
 ; Default value for Arecibo Observatory (37.873199 degrees North at UCB).
-if n_elements(long) EQ 0 then long = double(-122.257063) 
-;double(-66.75278) at Arecibo (-122.257063 degrees West at UCB).
+if n_elements(long) EQ 0 then long = double(-66.75278) 
+; Default at Arecibo (-122.257063 degrees West at UCB).
 ; timezone = UTC - 4
 ; hour angle ha + ra = LST
 
@@ -41,10 +41,8 @@ pro hadec2altaz, ha, dec, lat, long
 
 if n_elements(lat) EQ 0 then lat = double(18.34417) 
 ; Default value for Arecibo Observatory (37.873199 degrees North at UCB). 
-if n_elements(long) EQ 0 then long = double(-122.257063)   
-;double(-66.75278) at Arecibo (-122.257063 degrees West at UCB).
-
-print, lat
+if n_elements(long) EQ 0 then long = double(-66.75278)   
+; Default at Arecibo (-122.257063 degrees West at UCB).
 
 ha = double(ha * 15.0 * !dtor)
 delta = double(dec * !dtor)
