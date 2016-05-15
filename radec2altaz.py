@@ -1,5 +1,5 @@
 import numpy as np, pylab
-import scipy as np
+import scipy as sp
 
 def radec2altaz(ra, dec, lst, lat, lon):
 	n = len(ra)
