@@ -10,6 +10,7 @@ import scipy as sp
 # Altitude of NCP = lat and alt of SCP = -lat.
 # Use matplotlib to plot data points in dec vs. ra then alt vs. az.
 
+# Version Python 3.5.1
 def radec2altaz(ra, dec, lst):
 	n = len(ra)
 	alt = np.zeros((n, 1))
