@@ -6,7 +6,6 @@ def radec2altaz(ra, dec, lst, lat, lon):
 	n = len(ra)
 	alt = np.zeros((n, 1))
 	az = np.zeros((n, 1))
-	lst = np.zeros((n, 1))
 
 	# Inputs should be in decimal form. If not, then apply ten().
 	# Please stick with one pair of (latitude, longitude) at a time.
