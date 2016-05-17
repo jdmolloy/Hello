@@ -3,7 +3,6 @@ pro radec2altaz, ra, dec, lst, lat, long
 n = n_elements(ra)
 alt = transpose(dblarr(n))
 az = transpose(dblarr(n))
-lst = transpose(dblarr(n))
 
 ; Inputs should be in decimal form. If not, then apply ten().
 ;Please stick with one pair of (latitude, longitude) at a time.
