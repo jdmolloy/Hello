@@ -10,19 +10,16 @@ import scipy as sp
 # Altitude of NCP = lat and alt of SCP = -lat.
 # Use matplotlib to plot data points in dec vs. ra then alt vs. az.
 
+
 # Version Python 3.5.1
-def radec2altaz(ra, dec, lst):
+def radec2altaz(ra, dec, lst, lat=18.3538056, lon=-66.7552222):
 	n = len(ra)
 	alt = np.zeros((n, 1))
 	az = np.zeros((n, 1))
 
 	# Inputs should be in decimal form. If not, then apply ten().
 	# Please stick with one pair of (latitude, longitude) at a time.
-#	if len(lat) == 0:
-	lat = np.float64(18.3538056) 
 	# Default value for Arecibo Observatory (37.873199 degrees North at UCB).
-#	if len(lon) == 0: 
-	lon = np.float64(-66.7552222) 
 	# Default at Arecibo (-122.257063 degrees West at UCB).
 	# timezone = UTC - 4
 	# hour angle ha + ra = LST
@@ -31,6 +28,8 @@ def radec2altaz(ra, dec, lst):
 		ra = np.float64(ra)
 		dec = np.float64(dec)
 		lst = np.float64(lst)
+		lat = np.float64(lat)
+		lon = np.float64(lon)
 		alpha = np.float64(ra[i] * np.pi / 12.0)
 		delta = np.float64(dec[i] * np.pi / 180.0) 
 		lst_rad = np.float64(lst[i] * np.pi / 12.0)
@@ -46,6 +45,7 @@ def radec2altaz(ra, dec, lst):
 		transform1 = np.matrix([[np.cos(lst_rad), np.sin(lst_rad), 0.0], [np.sin(lst_rad), -np.cos(lst_rad), 0.0], [0.0, 0.0, 1.0]])
 		transform2 = np.matrix([[-np.sin(phi), 0.0, np.cos(phi)], [0.0, -1.0, 0.0], [np.cos(phi), 0.0, np.sin(phi)]])
 		transform = transform2 * transform1 * x
+
 		alt[i] = np.arcsin(transform[2]) * 180.0 / np.pi
 		az[i] = np.arctan2(transform[1], transform[0]) * 180.0 / np.pi
 
@@ -111,3 +111,6 @@ ha = np.array((0.0, 0.0, 0.0, 0.0))
 
 radec2altaz(ra, dec, lst)
 hadec2altaz(ha, dec)
+print('Now latitude is set to 0 to test at equator')
+radec2altaz(ra, dec, lst, lat=0.0, lon=33.3)
+radec2altaz(ra, dec, lst, lat=0.0, lon=222.2)
