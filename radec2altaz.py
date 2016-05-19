@@ -2,7 +2,6 @@ import numpy as np
 import pylab
 import scipy as sp
 
-# Still needs default values for latitude and longitude.
 # Dec. at Zenith = lat. Make the ra = LST.
 # Check at equator that horizon (alt = 0.0) dec = -90.0 for South (SCP) and = 90.0 North (NCP).
 # Off equator, North lat > 0, dec = lat - 90.0 for South horizon and = 90.0 - lat for North horizon.
@@ -53,7 +52,8 @@ def radec2altaz(ra, dec, lst, lat=18.3538056, lon=-66.7552222):
 			az[i] = az[i] + 360.0
 		if az[i] > 360.0:
 			az[i] = az[i] - 360.0
-
+			
+	np.set_printoptions(suppress=True)
 	print('radec2altaz gives alt array = ', alt)
 	print('radec2altaz gives az array = ', az)
 
@@ -96,7 +96,8 @@ def hadec2altaz(ha, dec):
 			az[i] = az[i] + 360.0
 		if az[i] > 360.0: 
 			az[i] = az[i] + 360.0
-
+			
+	np.set_printoptions(suppress=True)
 	print('hadec2altaz gives alt array = ', alt)
 	print('hadec2altaz gives az array = ', az)
 
