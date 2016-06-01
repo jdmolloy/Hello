@@ -95,7 +95,7 @@ def hadec2altaz(ha, dec):
 		if az[i] < 0.0: 
 			az[i] = az[i] + 360.0
 		if az[i] > 360.0: 
-			az[i] = az[i] + 360.0
+			az[i] = az[i] - 360.0
 			
 	np.set_printoptions(suppress=True)
 	print('hadec2altaz gives alt array = ', alt)
